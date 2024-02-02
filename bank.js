@@ -1,4 +1,5 @@
 const { CurrentAccount, SavingsAccount, SalaryAccount } = require('./account');
+const { MINIMUM_BALANCE_TO_WITHDRAW } = require('./account.constant');
 const { green, error } = require('./colorize.logger');
 
 class Bank {
@@ -27,17 +28,6 @@ class Bank {
       this.accounts.push(account);
       console.log(`${accountType} account created for ${name} with account number ${number}`);
     }
-  
-    getAccountDetails(accountNumber) {
-      const account = this.accounts.find(acc => acc.number === accountNumber);
-  
-      if (account) {
-        console.log(`Account details for account number ${accountNumber}:`);
-        console.log(account.getAccountDetails());
-      } else {
-        console.log(`Account with number ${accountNumber} not found.`);
-      }
-    }
 
     displayAllAccounts() {
       console.log('\nAll Accounts:');
@@ -49,18 +39,11 @@ class Bank {
     
     updateAccount(accountNumber, data) {
       const account = this.accounts.find(acc => acc.number === accountNumber);
-      if(!account) {
-        console.log(error(`Account with number ${accountNumber} not found.`));
-        return;
-      }
       if(data.name) {
         account.name = data.name;
       }
       if(data.number) {
         account.number = data.number;
-      }
-      if(data.name) {
-        account.name = data.name;
       }
       console.log(`Account ${accountNumber} updated.`);
       console.log(green(account.getAccountDetails()));
@@ -73,7 +56,7 @@ class Bank {
           this.accounts.splice(index, 1);
           console.log(`Account with number ${accountNumber} deleted.`);
       } else {
-              console.log(`Account with number ${accountNumber} not found.`);
+          console.log(`Account with number ${accountNumber} not found.`);
         }
     }
 
@@ -94,14 +77,28 @@ class Bank {
       if (account) {
         if (amount <= account.balance) {
           account.balance -= amount;
-          console.log(`Withdrawn ${amount} from account ${accountNumber}. New balance: ${account.balance}`);
+          console.log(green(`Withdrawn ${amount} from account ${accountNumber}. New balance: ${account.balance}`));
         } else {
-            console.log(`Insufficient funds in account ${accountNumber}.`);
+            console.log(error(`Insufficient funds in account ${accountNumber}.`));
         }
       } else {
-              console.log(`Account with number ${accountNumber} not found.`);
+              console.log(error(`Account with number ${accountNumber} not found.`));
           }
+    }
+    searchAccount(accountNumber){
+      const account = this.accounts.find(acc => acc.number === accountNumber);
+      console.log("Account found");
+      console.log(green(account.getAccountDetails()));
+      return account;
+    }
+
+    canWithdrawMoney(account) {
+      if(account.balance >= MINIMUM_BALANCE_TO_WITHDRAW) {
+        return true;
       }
+      return false;
+    }
+
   }
 
   module.exports = {
