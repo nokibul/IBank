@@ -1,7 +1,7 @@
-const { validAccountTypes } = require("./account.constant")
+const { VALID_ACCOUNT_TYPES } = require("./account.constant")
 
 const isAccountTypeValid = (accountType) => {
-    return validAccountTypes.includes(accountType)
+    return VALID_ACCOUNT_TYPES.includes(accountType)
 }
 
 const isOpeningBalanceValid = (openingAmount) => {
@@ -22,7 +22,7 @@ const validateUserInput = (userInput) => {
     }
 
     if(!isAccountTypeValid(userInput.accountType)){
-        response.message = `Invalid account type. Account type must be one of : ${validAccountTypes}`;
+        response.message = `Invalid account type. Account type must be one of : ${VALID_ACCOUNT_TYPES}`;
         response.success = false;
         return response;
     }
