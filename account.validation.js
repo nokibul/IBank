@@ -5,7 +5,14 @@ const isAccountTypeValid = (accountType) => {
 }
 
 const isOpeningBalanceValid = (openingAmount) => {
-    return openingAmount < 1000
+    return openingAmount >= 1000
+}
+
+const isValidNumber = (number) =>{
+    if(isNaN(number)) {
+        return false
+    }
+    return true
 }
 
 const validateUserInput = (userInput) => {
@@ -20,12 +27,23 @@ const validateUserInput = (userInput) => {
         return response;
     }
 
-    if(isOpeningBalanceValid(userInput.balance)){
+    if(!isValidNumber(userInput.number)){
+        response.message = 'Invalid account number. Account number must be valid number'
+        response.success = false;
+        return response
+    }
+    
+    if(!isValidNumber(userInput.balance)) {
+        response.message = 'Invalid balance. Balance must be a valid number'
+        response.success = false;
+        return response;
+    }
+    if(isValidNumber(userInput.balance) && !isOpeningBalanceValid(userInput.balance)){
         response.message = 'Invalid opening balance. Opening balance must be atleast 1000$'
         response.success = false;
         return response;
     }
-    
+
     return response
 }
 

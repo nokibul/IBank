@@ -38,7 +38,7 @@ class Bank {
     }
     
     updateAccount(accountNumber, data) {
-      const account = this.accounts.find(acc => acc.number === accountNumber);
+      const account = this.findAccount(accountNumber);
       if(data.name) {
         account.name = data.name;
       }
@@ -61,7 +61,7 @@ class Bank {
     }
 
     depositAmount(accountNumber, amount) {
-      const account = this.accounts.find(acc => acc.number === accountNumber);
+      const account = this.findAccount(accountNumber)
 
       if (account) {
         account.balance += amount;
@@ -85,8 +85,13 @@ class Bank {
               console.log(error(`Account with number ${accountNumber} not found.`));
           }
     }
+
+    findAccount(accountNumber) {
+      return this.accounts.find(acc => acc.number === accountNumber);
+    }
+
     searchAccount(accountNumber){
-      const account = this.accounts.find(acc => acc.number === accountNumber);
+      const account = this.findAccount(accountNumber);
       console.log("Account found");
       console.log(green(account.getAccountDetails()));
       return account;
