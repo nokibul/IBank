@@ -1,5 +1,5 @@
 const { CurrentAccount, SavingsAccount, SalaryAccount } = require('./account');
-const { green } = require('./colorize.logger');
+const { green, error } = require('./colorize.logger');
 
 class Bank {
     constructor() {
@@ -38,6 +38,7 @@ class Bank {
         console.log(`Account with number ${accountNumber} not found.`);
       }
     }
+
     displayAllAccounts() {
       console.log('\nAll Accounts:');
       this.accounts.forEach(account => {
@@ -46,16 +47,24 @@ class Bank {
       });
     }
     
-    updateAccount(accountNumber, newName) {
+    updateAccount(accountNumber, data) {
       const account = this.accounts.find(acc => acc.number === accountNumber);
-
-      if (account) {
-          account.name = newName;
-          console.log(`Account with number ${accountNumber} updated with new name: ${newName}`);
-      } else {
-              console.log(`Account with number ${accountNumber} not found.`);
-          }
+      if(!account) {
+        console.log(error(`Account with number ${accountNumber} not found.`));
+        return;
       }
+      if(data.name) {
+        account.name = data.name;
+      }
+      if(data.number) {
+        account.number = data.number;
+      }
+      if(data.name) {
+        account.name = data.name;
+      }
+      console.log(`Account ${accountNumber} updated.`);
+      console.log(green(account.getAccountDetails()));
+    }
 
     deleteAccount(accountNumber) {
       const index = this.accounts.findIndex(acc => acc.number === accountNumber);
@@ -65,8 +74,8 @@ class Bank {
           console.log(`Account with number ${accountNumber} deleted.`);
       } else {
               console.log(`Account with number ${accountNumber} not found.`);
-          }
-      }
+        }
+    }
 
     depositAmount(accountNumber, amount) {
       const account = this.accounts.find(acc => acc.number === accountNumber);
@@ -76,8 +85,8 @@ class Bank {
         console.log(`Deposited ${amount} into account ${accountNumber}. New balance: ${account.balance}`);
       } else {
           console.log(`Account with number ${accountNumber} not found.`);
-        }
       }
+    }
 
     withdrawAmount(accountNumber, amount) {
       const account = this.accounts.find(acc => acc.number === accountNumber);
